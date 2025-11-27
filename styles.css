@@ -23,7 +23,6 @@ body {
     text-align: center;
 }
 
-/* Header */
 .header {
     margin-bottom: 2.5rem;
 }
@@ -41,7 +40,6 @@ body {
     font-weight: 400;
 }
 
-/* Converter Card */
 .converter-card {
     background: #FFFFFF;
     border-radius: 12px;
@@ -50,7 +48,6 @@ body {
     margin-bottom: 2rem;
 }
 
-/* Upload Zone */
 .upload-zone {
     border: 2px dashed #CBD5E1;
     background-color: #F0F9FF;
@@ -101,7 +98,6 @@ body {
     color: #2563EB;
 }
 
-/* Settings Panel */
 .settings-panel {
     margin-top: 1.5rem;
     animation: slideDown 0.3s ease;
@@ -233,7 +229,6 @@ body {
     stroke: currentColor;
 }
 
-/* Success Card */
 .success-card {
     background: #FFFFFF;
     border-radius: 12px;
@@ -336,7 +331,6 @@ body {
     background-color: #F1F5F9;
 }
 
-/* Footer */
 .footer {
     text-align: center;
     display: flex;
@@ -358,7 +352,6 @@ body {
     color: #94A3B8;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
     .title {
         font-size: 2rem;
