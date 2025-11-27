@@ -6,22 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FileForge - File Converter</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Libraries for file conversion -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <!-- Header -->
         <header class="header">
             <h1 class="title">FileForge</h1>
             <p class="subtitle">Convert your files instantly and securely</p>
         </header>
 
-        <!-- Main Converter Card -->
         <div class="converter-card" id="converterCard">
-            <!-- Upload Zone -->
             <div class="upload-zone" id="uploadZone">
                 <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
@@ -33,7 +29,6 @@
                 <input type="file" id="fileInput" hidden>
             </div>
 
-            <!-- Conversion Settings Panel -->
             <div class="settings-panel" id="settingsPanel">
                 <div class="divider"></div>
                 <div class="file-info">
@@ -58,7 +53,6 @@
             </div>
         </div>
 
-        <!-- Success Screen (Hidden Initially) -->
         <div class="success-card hidden" id="successCard">
             <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
@@ -91,7 +85,6 @@
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
             <svg class="footer-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
