@@ -1,4 +1,3 @@
-// DOM Elements
 const uploadZone = document.getElementById('uploadZone');
 const fileInput = document.getElementById('fileInput');
 const browseBtn = document.getElementById('browseBtn');
@@ -19,7 +18,6 @@ let convertedBlob = null;
 let convertedFormat = null;
 let convertedFileName = null;
 
-// Upload Zone Click
 uploadZone.addEventListener('click', () => {
     fileInput.click();
 });
@@ -29,7 +27,6 @@ browseBtn.addEventListener('click', (e) => {
     fileInput.click();
 });
 
-// Drag and Drop
 uploadZone.addEventListener('dragover', (e) => {
     e.preventDefault();
     uploadZone.style.borderColor = '#3B82F6';
@@ -47,18 +44,15 @@ uploadZone.addEventListener('drop', (e) => {
     }
 });
 
-// File Input Change
 fileInput.addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
         handleFileSelect(e.target.files[0]);
     }
 });
 
-// Handle File Selection
 function handleFileSelect(file) {
     selectedFile = file;
     
-    // Update upload zone with file icon SVG
     const fileIconSVG = `
         <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -72,7 +66,6 @@ function handleFileSelect(file) {
         <p class="upload-link">${formatFileSize(file.size)}</p>
     `;
     
-    // Show settings panel
     settingsPanel.classList.add('active');
     fileBadge.innerHTML = `
         <svg class="file-badge-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,38 +74,31 @@ function handleFileSelect(file) {
         ${file.name}
     `;
     
-    // Update format options based on file type
     updateFormatOptions(file);
     
-    // Enable convert button if format is selected
     if (formatDropdown.value) {
         convertBtn.disabled = false;
     }
 }
 
-// Update format options based on file type
 function updateFormatOptions(file) {
     const fileType = file.type;
     const fileName = file.name.toLowerCase();
     
     formatDropdown.innerHTML = '<option value="">Select format...</option>';
     
-    // Image conversions
     if (fileType.startsWith('image/')) {
         addFormatOption('png', 'PNG Image', getImageIconSVG());
         addFormatOption('jpg', 'JPG Image', getImageIconSVG());
         addFormatOption('webp', 'WEBP Image', getImageIconSVG());
         addFormatOption('pdf', 'PDF Document', getDocIconSVG());
     }
-    // Text/Document conversions
     else if (fileType.startsWith('text/') || fileName.endsWith('.txt')) {
         addFormatOption('pdf', 'PDF Document', getDocIconSVG());
     }
-    // PDF conversions
     else if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
         addFormatOption('txt', 'Text File', getTextIconSVG());
     }
-    // Default options
     else {
         addFormatOption('txt', 'Text File', getTextIconSVG());
         addFormatOption('pdf', 'PDF Document', getDocIconSVG());
@@ -126,20 +112,17 @@ function addFormatOption(value, label, iconSVG) {
     formatDropdown.appendChild(option);
 }
 
-// Format Dropdown Change
 formatDropdown.addEventListener('change', () => {
     if (selectedFile && formatDropdown.value) {
         convertBtn.disabled = false;
     }
 });
 
-// Convert Button Click
 convertBtn.addEventListener('click', async () => {
     if (!selectedFile || !formatDropdown.value) return;
     
     convertedFormat = formatDropdown.value;
     
-    // Show loading state
     convertBtn.innerHTML = `
         <svg class="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -151,7 +134,6 @@ convertBtn.addEventListener('click', async () => {
     convertBtn.disabled = true;
     
     try {
-        // Perform actual conversion
         await performConversion();
         showSuccessScreen();
     } catch (error) {
@@ -162,12 +144,10 @@ convertBtn.addEventListener('click', async () => {
     }
 });
 
-// Perform actual file conversion
 async function performConversion() {
     const sourceType = selectedFile.type;
     const sourceName = selectedFile.name.toLowerCase();
     
-    // Image to Image/PDF conversions
     if (sourceType.startsWith('image/')) {
         if (convertedFormat === 'pdf') {
             await convertImageToPDF();
@@ -175,19 +155,16 @@ async function performConversion() {
             await convertImageToImage();
         }
     }
-    // Text to PDF
     else if (sourceType.startsWith('text/') || sourceName.endsWith('.txt')) {
         if (convertedFormat === 'pdf') {
             await convertTextToPDF();
         }
     }
-    // PDF to Text
     else if (sourceType === 'application/pdf' || sourceName.endsWith('.pdf')) {
         if (convertedFormat === 'txt') {
             await convertPDFToText();
         }
     }
-    // Fallback: just copy the file
     else {
         convertedBlob = selectedFile;
     }
@@ -195,7 +172,6 @@ async function performConversion() {
     convertedFileName = selectedFile.name.replace(/\.[^/.]+$/, '') + '.' + convertedFormat;
 }
 
-// Image to Image conversion
 async function convertImageToImage() {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -225,7 +201,6 @@ async function convertImageToImage() {
     });
 }
 
-// Image to PDF conversion
 async function convertImageToPDF() {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -234,15 +209,14 @@ async function convertImageToPDF() {
             img.onload = () => {
                 const { jsPDF } = window.jspdf;
                 
-                // Calculate dimensions to fit page
                 const imgWidth = img.width;
                 const imgHeight = img.height;
                 const ratio = imgWidth / imgHeight;
                 
-                let pdfWidth = 210; // A4 width in mm
+                let pdfWidth = 210;
                 let pdfHeight = pdfWidth / ratio;
                 
-                if (pdfHeight > 297) { // A4 height in mm
+                if (pdfHeight > 297) {
                     pdfHeight = 297;
                     pdfWidth = pdfHeight * ratio;
                 }
@@ -265,7 +239,6 @@ async function convertImageToPDF() {
     });
 }
 
-// Text to PDF conversion
 async function convertTextToPDF() {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -287,20 +260,15 @@ async function convertTextToPDF() {
     });
 }
 
-// PDF to Text conversion (simplified - extracts text if possible)
 async function convertPDFToText() {
-    // Note: Full PDF text extraction requires pdf.js library
-    // This is a placeholder that creates a text file with metadata
     const text = `PDF File: ${selectedFile.name}\nSize: ${formatFileSize(selectedFile.size)}\n\nNote: Full PDF text extraction requires additional libraries.\nThis is a demo conversion.`;
     convertedBlob = new Blob([text], { type: 'text/plain' });
 }
 
-// Show Success Screen
 function showSuccessScreen() {
     converterCard.style.display = 'none';
     successCard.classList.remove('hidden');
     
-    // Update conversion summary
     const sourceExt = selectedFile.name.split('.').pop().toUpperCase();
     const targetExt = convertedFormat.toUpperCase();
     conversionSummary.innerHTML = `
@@ -309,11 +277,9 @@ function showSuccessScreen() {
         <p><strong>Size:</strong> ${formatFileSize(convertedBlob.size)}</p>
     `;
     
-    // Update preview
     updatePreview();
 }
 
-// Update preview based on converted file type
 function updatePreview() {
     if (convertedFormat === 'png' || convertedFormat === 'jpg' || convertedFormat === 'webp') {
         const url = URL.createObjectURL(convertedBlob);
@@ -333,7 +299,6 @@ function updatePreview() {
     }
 }
 
-// Download Button
 downloadBtn.addEventListener('click', () => {
     if (!convertedBlob) return;
     
@@ -347,17 +312,14 @@ downloadBtn.addEventListener('click', () => {
     URL.revokeObjectURL(url);
 });
 
-// Convert Another File
 convertAnotherBtn.addEventListener('click', () => {
     resetApp();
 });
 
-// Start Over with Same File
 startOverBtn.addEventListener('click', () => {
     successCard.classList.add('hidden');
     converterCard.style.display = 'block';
     
-    // Reset convert button
     convertBtn.textContent = 'Convert File';
     convertBtn.classList.remove('loading');
     convertBtn.disabled = false;
@@ -365,18 +327,15 @@ startOverBtn.addEventListener('click', () => {
     convertedBlob = null;
 });
 
-// Reset App
 function resetApp() {
     selectedFile = null;
     convertedFormat = null;
     convertedBlob = null;
     convertedFileName = null;
     
-    // Hide success card
     successCard.classList.add('hidden');
     converterCard.style.display = 'block';
     
-    // Reset upload zone
     uploadZone.classList.remove('file-selected');
     uploadZone.innerHTML = `
         <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -386,16 +345,13 @@ function resetApp() {
         <p class="upload-link">or <span id="browseBtn">click to browse</span></p>
     `;
     
-    // Re-attach browse button listener
     document.getElementById('browseBtn').addEventListener('click', (e) => {
         e.stopPropagation();
         fileInput.click();
     });
     
-    // Hide settings panel
     settingsPanel.classList.remove('active');
     
-    // Reset form
     fileInput.value = '';
     formatDropdown.innerHTML = '<option value="">Select format...</option>';
     convertBtn.disabled = true;
@@ -403,7 +359,6 @@ function resetApp() {
     convertBtn.classList.remove('loading');
 }
 
-// Utility: Format File Size
 function formatFileSize(bytes) {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -412,7 +367,6 @@ function formatFileSize(bytes) {
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
 }
 
-// SVG Icon Helpers
 function getImageIconSVG() {
     return '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>';
 }
